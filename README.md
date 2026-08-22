@@ -3,6 +3,12 @@
 LG전자와 삼성전자의 실제 냉장고 모델을 한눈에 비교하고 살펴볼 수 있는 냉장고 카탈로그 웹사이트입니다.
 A refrigerator catalog website for browsing and comparing real LG Electronics and Samsung Electronics refrigerator models side by side.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-frostmarket.vercel.app-38bdf8?style=for-the-badge)](https://frostmarket.vercel.app)
+
+## Live Demo
+
+**[https://frostmarket.vercel.app](https://frostmarket.vercel.app)**
+
 ---
 
 ## 소개 (Korean)
