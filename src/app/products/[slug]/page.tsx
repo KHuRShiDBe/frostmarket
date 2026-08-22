@@ -37,6 +37,7 @@ export async function generateMetadata(
   return {
     title,
     description,
+    alternates: { canonical: `/products/${product.id}` },
     openGraph: buildOpenGraph({ title, description, images: [product.mainImage] }),
   };
 }

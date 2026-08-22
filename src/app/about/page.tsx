@@ -8,6 +8,7 @@ const description = "FrostMarket가 어떤 서비스인지 소개합니다.";
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/about" },
   openGraph: buildOpenGraph({ title, description }),
 };
 

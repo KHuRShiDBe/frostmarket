@@ -10,7 +10,7 @@ import { CompareProvider } from "@/context/CompareContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { QuickViewProvider } from "@/context/QuickViewContext";
 import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
-import { buildOpenGraph } from "@/lib/seo";
+import { buildOpenGraph, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -22,8 +22,10 @@ const title = "FrostMarket | 냉장고 비교 및 제품 정보";
 const description = "LG전자와 삼성전자 냉장고 모델을 한눈에 확인하고 비교해 보세요.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title,
   description,
+  alternates: { canonical: "/" },
   openGraph: buildOpenGraph({ title, description }),
 };
 

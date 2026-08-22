@@ -9,6 +9,7 @@ const description = "FrostMarket 제품 문의 양식.";
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/inquiry" },
   openGraph: buildOpenGraph({ title, description }),
 };
 

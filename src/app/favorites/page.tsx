@@ -9,6 +9,7 @@ const description = "FrostMarket에서 저장한 관심 냉장고 목록.";
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/favorites" },
   openGraph: buildOpenGraph({ title, description }),
 };
 

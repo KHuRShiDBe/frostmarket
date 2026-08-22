@@ -9,6 +9,7 @@ const description = "FrostMarket 자주 묻는 질문 안내.";
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/faq" },
   openGraph: buildOpenGraph({ title, description }),
 };
 
