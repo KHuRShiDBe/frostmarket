@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { getProduct } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { localizedBrandName } from "@/i18n";
 import { useLocale } from "@/context/LocaleContext";
 import { useCart, MIN_QUANTITY, MAX_QUANTITY } from "@/context/CartContext";
@@ -21,7 +21,7 @@ export default function CartLineRow({
 }) {
   const { locale, t } = useLocale();
   const { setQuantity, removeItem } = useCart();
-  const product = getProduct(productId);
+  const product = getProductService().getProduct(productId);
   if (!product) return null;
 
   const brand = localizedBrandName(product.brand, locale);

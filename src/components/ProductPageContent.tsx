@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ProductGallery from "@/components/ProductGallery";
@@ -10,6 +11,9 @@ import AddToCartButton from "@/components/AddToCartButton";
 import RelatedProductCard from "@/components/RelatedProductCard";
 import RecentlyViewedSection from "@/components/RecentlyViewedSection";
 import RecordRecentlyViewed from "@/components/RecordRecentlyViewed";
+import ProductRatingSummary from "@/components/ProductRatingSummary";
+import ReviewsSection from "@/components/ReviewsSection";
+import NotFoundContent from "@/components/NotFoundContent";
 import { getBrandEnglishName, products, SPEC_PENDING, type Product } from "@/data/products";
 import {
   getFullSpecRows,
@@ -19,6 +23,9 @@ import {
   translateSpecValue,
 } from "@/i18n";
 import { useLocale } from "@/context/LocaleContext";
+import { useAuth } from "@/context/AuthContext";
+import { useProductReviews } from "@/hooks/useReviews";
+import { getProductService } from "@/services/products";
 import { formatPriceKRW } from "@/lib/currency";
 
 function MessageIcon() {
@@ -67,8 +74,33 @@ function HighlightIcon({ highlightKey }: { highlightKey: string }) {
   );
 }
 
-export default function ProductPageContent({ product }: { product: Product }) {
+export default function ProductPageContent({
+  slug,
+  seedProduct,
+}: {
+  slug: string;
+  /** Static seed lookup, resolved server-side. Null for a brand-new admin-added product (not yet in the static array) or a genuinely invalid slug. */
+  seedProduct: Product | null;
+}) {
   const { locale, t } = useLocale();
+  const { user } = useAuth();
+  const reviewsState = useProductReviews(slug, user?.id ?? null);
+
+  // Start from the seed lookup (SSR-safe, matches current behavior for all
+  // 20 catalog products) and swap in the effective product — seed + any
+  // admin overrides, or a brand-new admin addition — once mounted. Same
+  // hydration-safe pattern as every other localStorage-backed read here.
+  const [product, setProduct] = useState<Product | null>(seedProduct);
+  const [resolved, setResolved] = useState(seedProduct !== null);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setProduct(getProductService().getProduct(slug));
+    setResolved(true);
+  }, [slug]);
+
+  if (!resolved) return null;
+  if (!product) return <NotFoundContent />;
 
   const specRows = getFullSpecRows(product, locale);
   const highlights = getLocalizedHighlights(product, locale);
@@ -123,6 +155,7 @@ export default function ProductPageContent({ product }: { product: Product }) {
                 <p className="mt-2 font-heading text-2xl font-bold text-slate-900 sm:text-3xl">
                   {formatPriceKRW(product.price)}
                 </p>
+                <ProductRatingSummary summary={reviewsState.summary} />
               </div>
               <FavoriteToggle productId={product.id} model={product.model} variant="inline" />
             </div>
@@ -257,6 +290,17 @@ export default function ProductPageContent({ product }: { product: Product }) {
             </div>
           </section>
         )}
+
+        <ReviewsSection
+          currentUser={user}
+          reviews={reviewsState.reviews}
+          summary={reviewsState.summary}
+          ownReview={reviewsState.ownReview}
+          createReview={reviewsState.createReview}
+          updateReview={reviewsState.updateReview}
+          deleteReview={reviewsState.deleteReview}
+          toggleHelpful={reviewsState.toggleHelpful}
+        />
 
         <RecentlyViewedSection currentProductId={product.id} />
 

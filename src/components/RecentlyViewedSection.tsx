@@ -2,7 +2,8 @@
 
 import RecentlyViewedCard from "./RecentlyViewedCard";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
-import { products, type Product } from "@/data/products";
+import type { Product } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { useLocale } from "@/context/LocaleContext";
 
 export default function RecentlyViewedSection({
@@ -17,7 +18,7 @@ export default function RecentlyViewedSection({
 
   const items = recentIds
     .filter((id) => id !== currentProductId)
-    .map((id) => products.find((p) => p.id === id))
+    .map((id) => getProductService().getProduct(id))
     .filter((p): p is Product => Boolean(p));
 
   if (items.length === 0) return null;

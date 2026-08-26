@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { useLocale } from "@/context/LocaleContext";
-import { getProduct } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { formatPriceKRW } from "@/lib/currency";
 
 function ChevronIcon({ open }: { open: boolean }) {
@@ -29,7 +29,7 @@ export default function OrderSummaryPanel({ deliveryCost = 0 }: { deliveryCost?:
   const lines = (
     <div className="flex flex-col gap-4">
       {items.map((line) => {
-        const product = getProduct(line.productId);
+        const product = getProductService().getProduct(line.productId);
         if (!product) return null;
         return (
           <div key={line.productId} className="flex items-center gap-3">

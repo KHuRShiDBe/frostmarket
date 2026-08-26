@@ -5,6 +5,15 @@ import ProductCard from "./ProductCard";
 import { SPEC_PENDING, type Product } from "@/data/products";
 import { translateSpecValue, type Locale, type TranslationDict } from "@/i18n";
 import { useLocale } from "@/context/LocaleContext";
+import {
+  CAPACITY_RANGES,
+  hasIceMaker,
+  isFeatureSupported,
+  parseCapacityLiters,
+  parseDoorCount,
+  parseEnergyGrade,
+  type CapacityRangeKey,
+} from "@/lib/productSpecs";
 
 const ALL = "all";
 
@@ -49,51 +58,6 @@ function sortProducts(list: Product[], sort: SortOption): Product[] {
   }
   return sorted;
 }
-
-/** Extracts a leading number from a capacity string (e.g. "507 L" -> 507). */
-function parseCapacityLiters(capacity: string): number | null {
-  if (!capacity || capacity === SPEC_PENDING) return null;
-  const match = capacity.match(/(\d+(?:\.\d+)?)/);
-  return match ? parseFloat(match[1]) : null;
-}
-
-/** Extracts the door count from a door-type string (e.g. "2도어 / 상냉동·하냉장" -> 2). */
-function parseDoorCount(doorType: string): number | null {
-  if (!doorType || doorType === SPEC_PENDING) return null;
-  const match = doorType.match(/(\d+)\s*도어/);
-  return match ? Number(match[1]) : null;
-}
-
-/** Extracts the energy grade number from a grade string (e.g. "1등급" -> 1). */
-function parseEnergyGrade(energyGrade: string): number | null {
-  if (!energyGrade || energyGrade === SPEC_PENDING) return null;
-  const match = energyGrade.match(/(\d+)\s*등급/);
-  return match ? Number(match[1]) : null;
-}
-
-/** Whether a product's Wi-Fi field confirms real Wi-Fi support (not "unsupported" or unconfirmed). */
-function isWifiSupported(wifi: string): boolean {
-  return wifi !== SPEC_PENDING && wifi.includes("지원") && !wifi.includes("안 함") && !wifi.includes("안함");
-}
-
-/** Whether a product's ice maker field confirms it actually has one. */
-function hasIceMaker(iceMaker: string): boolean {
-  return iceMaker !== SPEC_PENDING && iceMaker !== "" && iceMaker !== "없음";
-}
-
-type CapacityRangeKey = "under400" | "from400to700" | "from700to900" | "plus900";
-
-/**
- * Capacity buckets chosen from the real spread of `totalCapacity` values in the
- * current catalog (roughly: 317-349L, 507L, 602-651L, 832-902L) rather than the
- * generic 100L-wide bands, so every bucket actually contains products.
- */
-const CAPACITY_RANGES: { key: CapacityRangeKey; test: (liters: number) => boolean }[] = [
-  { key: "under400", test: (n) => n < 400 },
-  { key: "from400to700", test: (n) => n >= 400 && n < 700 },
-  { key: "from700to900", test: (n) => n >= 700 && n < 900 },
-  { key: "plus900", test: (n) => n >= 900 },
-];
 
 function toOptions(raw: string[], locale: Locale): Option[] {
   return raw.map((value) => ({ value, label: translateSpecValue(value, locale) }));
@@ -656,7 +620,7 @@ export default function ProductCatalog({ products }: { products: Product[] }) {
       }
 
       if (targetDoorCount !== null && parseDoorCount(product.doorType) !== targetDoorCount) return false;
-      if (wifiOnly && !isWifiSupported(product.wifi)) return false;
+      if (wifiOnly && !isFeatureSupported(product.wifi)) return false;
       if (iceMakerOnly && !hasIceMaker(product.iceMaker)) return false;
 
       return true;

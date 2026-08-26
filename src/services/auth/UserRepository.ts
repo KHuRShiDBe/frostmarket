@@ -1,4 +1,5 @@
 import type { StoredUser } from "./types";
+import { SEED_ADMIN_USER } from "./seedAdmin";
 
 /**
  * Storage seam for user records. The UI/AuthService never touch localStorage
@@ -8,6 +9,7 @@ import type { StoredUser } from "./types";
 export interface UserRepository {
   findByEmail(email: string): StoredUser | null;
   findById(id: string): StoredUser | null;
+  getAll(): StoredUser[];
   create(user: StoredUser): void;
   update(
     id: string,
@@ -21,15 +23,9 @@ function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
-function readUsers(): StoredUser[] {
-  try {
-    const raw = window.localStorage.getItem(USERS_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+/** Legacy records saved before `role` existed default to "user", never "admin". */
+function normalizeUser(user: StoredUser): StoredUser {
+  return user.role ? user : { ...user, role: "user" };
 }
 
 function writeUsers(users: StoredUser[]): void {
@@ -37,6 +33,22 @@ function writeUsers(users: StoredUser[]): void {
     window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
   } catch {
     // ignore write failures (e.g. storage disabled)
+  }
+}
+
+function readUsers(): StoredUser[] {
+  try {
+    const raw = window.localStorage.getItem(USERS_KEY);
+    // Key has never been written: first run, so seed the one demo admin
+    // account (see seedAdmin.ts). An empty array is left alone.
+    if (raw === null) {
+      writeUsers([SEED_ADMIN_USER]);
+      return [SEED_ADMIN_USER];
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.map(normalizeUser) : [];
+  } catch {
+    return [];
   }
 }
 
@@ -49,6 +61,10 @@ export class LocalStorageUserRepository implements UserRepository {
 
   findById(id: string): StoredUser | null {
     return readUsers().find((user) => user.id === id) ?? null;
+  }
+
+  getAll(): StoredUser[] {
+    return readUsers();
   }
 
   create(user: StoredUser): void {

@@ -2,6 +2,8 @@ import { DemoAuthService, type AuthService } from "./AuthService";
 import { LocalStorageUserRepository } from "./UserRepository";
 import { BrowserSessionStore } from "./SessionStore";
 
+export { SEED_ADMIN_EMAIL, SEED_ADMIN_DEMO_PASSWORD } from "./seedAdmin";
+
 let activeService: AuthService | null = null;
 
 /**
@@ -27,4 +29,5 @@ export type {
   RegisterInput,
   StoredUser,
   User,
+  UserRole,
 } from "./types";

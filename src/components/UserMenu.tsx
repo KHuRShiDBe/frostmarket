@@ -86,6 +86,18 @@ export default function UserMenu() {
           <Link href="/account/recently-viewed" onClick={() => setOpen(false)} className={menuLinkClass}>
             {t.recentlyViewed.heading}
           </Link>
+          {user.role === "admin" && (
+            <>
+              <div className="my-1 border-t border-slate-100" />
+              <Link
+                href="/admin"
+                onClick={() => setOpen(false)}
+                className={`${menuLinkClass} font-medium text-sky-600 hover:bg-sky-50`}
+              >
+                {t.admin.nav.dashboard}
+              </Link>
+            </>
+          )}
           <div className="my-1 border-t border-slate-100" />
           <button
             type="button"

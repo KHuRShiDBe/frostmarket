@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLocale } from "@/context/LocaleContext";
 
-type PageKey = "favorites" | "compare" | "about" | "faq" | "inquiry" | "cart";
+type PageKey = "favorites" | "compare" | "about" | "faq" | "inquiry" | "cart" | "finder";
 
 export default function PageIntro({
   page,

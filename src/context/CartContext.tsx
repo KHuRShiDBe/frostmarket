@@ -10,7 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getProduct } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { useLocale } from "@/context/LocaleContext";
 
 const STORAGE_KEY = "frostmarket:cart";
@@ -116,19 +116,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = useCallback(
     (productId: string) => {
+      const product = getProductService().getProduct(productId);
+      if (!product || product.status === "outOfStock" || product.stock <= 0) {
+        showNotice({ message: t.cart.outOfStock });
+        return;
+      }
+
+      const stockCap = Math.max(0, product.stock);
       setItems((prev) => {
         const existing = prev.find((line) => line.productId === productId);
         if (existing) {
-          return prev.map((line) =>
-            line.productId === productId
-              ? { ...line, quantity: Math.min(MAX_QUANTITY, line.quantity + 1) }
-              : line,
-          );
+          const nextQuantity = Math.min(MAX_QUANTITY, stockCap, existing.quantity + 1);
+          return prev.map((line) => (line.productId === productId ? { ...line, quantity: nextQuantity } : line));
         }
-        return [...prev, { productId, quantity: 1 }];
+        return [...prev, { productId, quantity: Math.min(MAX_QUANTITY, stockCap, 1) }];
       });
-      const product = getProduct(productId);
-      showNotice({ message: t.cart.addedToast(product ? product.model : productId) });
+      showNotice({ message: t.cart.addedToast(product.model) });
     },
     [showNotice, t],
   );
@@ -164,7 +167,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const idsSet = new Set(items.map((line) => line.productId));
     const totalQuantity = items.reduce((sum, line) => sum + line.quantity, 0);
     const totalPrice = items.reduce((sum, line) => {
-      const product = getProduct(line.productId);
+      const product = getProductService().getProduct(line.productId);
       return sum + (product ? product.price * line.quantity : 0);
     }, 0);
 

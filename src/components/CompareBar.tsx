@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCompare } from "@/context/CompareContext";
-import { getProductFullName, products } from "@/data/products";
+import { getProductFullName, type Product } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { useLocale } from "@/context/LocaleContext";
 
 export default function CompareBar() {
@@ -13,8 +14,8 @@ export default function CompareBar() {
   if (selectedIds.length === 0) return null;
 
   const selectedProducts = selectedIds
-    .map((id) => products.find((p) => p.id === id))
-    .filter((p): p is (typeof products)[number] => Boolean(p));
+    .map((id) => getProductService().getProduct(id))
+    .filter((p): p is Product => Boolean(p));
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 shadow-[0_-8px_24px_rgba(15,23,42,0.08)] backdrop-blur">

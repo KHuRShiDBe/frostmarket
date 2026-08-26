@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import ProductCard from "./ProductCard";
-import { products } from "@/data/products";
+import type { Product } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { useFavorites } from "@/context/FavoritesContext";
 import { useLocale } from "@/context/LocaleContext";
 
 export default function FavoritesView() {
   const { favoriteIds } = useFavorites();
   const { t } = useLocale();
-  const favoriteProducts = products.filter((product) => favoriteIds.includes(product.id));
+  const favoriteProducts = favoriteIds
+    .map((id) => getProductService().getProduct(id))
+    .filter((p): p is Product => Boolean(p));
 
   if (favoriteProducts.length === 0) {
     return (

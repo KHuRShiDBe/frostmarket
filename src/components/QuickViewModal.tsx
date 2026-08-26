@@ -6,7 +6,8 @@ import Link from "next/link";
 import ContactTrigger from "./ContactTrigger";
 import AddToCartButton from "./AddToCartButton";
 import { useQuickView } from "@/context/QuickViewContext";
-import { getProductFullName, products, SPEC_PENDING } from "@/data/products";
+import { getProductFullName, SPEC_PENDING } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { translateSpecValue } from "@/i18n";
 import { useLocale } from "@/context/LocaleContext";
 import { formatPriceKRW } from "@/lib/currency";
@@ -27,7 +28,7 @@ function CloseIcon() {
 export default function QuickViewModal() {
   const { productId, closeQuickView } = useQuickView();
   const { locale, t } = useLocale();
-  const product = productId ? products.find((p) => p.id === productId) : null;
+  const product = productId ? getProductService().getProduct(productId) : null;
 
   useEffect(() => {
     if (!product) return;

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import ProductPageContent from "@/components/ProductPageContent";
 import {
   getProduct,
@@ -33,8 +32,12 @@ export async function generateMetadata(
 
 export default async function ProductPage(props: PageProps<"/products/[slug]">) {
   const { slug } = await props.params;
-  const product = getProduct(slug);
-  if (!product) notFound();
+  // Not calling notFound() here: a product added through Admin after the
+  // last build won't be in this static seed lookup, but may still exist in
+  // the merged (seed + admin overrides/additions) catalog — ProductPageContent
+  // resolves that client-side and shows its own not-found state if it's
+  // genuinely missing everywhere.
+  const product = getProduct(slug) ?? null;
 
-  return <ProductPageContent product={product} />;
+  return <ProductPageContent slug={slug} seedProduct={product} />;
 }

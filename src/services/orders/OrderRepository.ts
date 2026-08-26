@@ -12,18 +12,29 @@ export interface OrderRepository {
   getByOrderNumber(orderNumber: string): Order | null;
   getByUserId(userId: string): Order[];
   getAll(): Order[];
+  /** Admin-only status changes. Same repository/storage as the customer's Account → Orders, so the change is visible there immediately. */
+  update(
+    orderNumber: string,
+    updates: Partial<Pick<Order, "orderStatus" | "paymentStatus">>,
+  ): Order | null;
 }
 
 const ORDERS_KEY = "frostmarket:orders";
 const SEQUENCE_KEY = "frostmarket:orderSequence";
 const SEQUENCE_START = 1000;
 
+/** Older demo orders used "completed" before Shipped/Delivered were split out; treat it as Delivered. */
+function normalizeOrder(order: Order): Order {
+  const legacyStatus = order.orderStatus as string;
+  return legacyStatus === "completed" ? { ...order, orderStatus: "delivered" } : order;
+}
+
 function readOrders(): Order[] {
   try {
     const raw = window.localStorage.getItem(ORDERS_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    return Array.isArray(parsed) ? parsed.map(normalizeOrder) : [];
   } catch {
     return [];
   }
@@ -80,5 +91,19 @@ export class LocalStorageOrderRepository implements OrderRepository {
 
   getAll(): Order[] {
     return readOrders();
+  }
+
+  update(
+    orderNumber: string,
+    updates: Partial<Pick<Order, "orderStatus" | "paymentStatus">>,
+  ): Order | null {
+    const orders = readOrders();
+    const index = orders.findIndex((order) => order.orderNumber === orderNumber);
+    if (index === -1) return null;
+
+    const updated = { ...orders[index], ...updates };
+    orders[index] = updated;
+    writeOrders(orders);
+    return updated;
   }
 }

@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import CompareBar from "@/components/CompareBar";
-import BackToTop from "@/components/BackToTop";
-import QuickViewModal from "@/components/QuickViewModal";
-import CartDrawer from "@/components/CartDrawer";
-import CartToast from "@/components/CartToast";
+import StorefrontChrome from "@/components/StorefrontChrome";
 import { CompareProvider } from "@/context/CompareContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { QuickViewProvider } from "@/context/QuickViewContext";
@@ -44,14 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 <QuickViewProvider>
                   <RecentlyViewedProvider>
                     <CartProvider>
-                      <Header />
-                      {children}
-                      <Footer />
-                      <CompareBar />
-                      <BackToTop />
-                      <QuickViewModal />
-                      <CartDrawer />
-                      <CartToast />
+                      <StorefrontChrome>{children}</StorefrontChrome>
                     </CartProvider>
                   </RecentlyViewedProvider>
                 </QuickViewProvider>

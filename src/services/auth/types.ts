@@ -1,3 +1,6 @@
+/** "admin" unlocks /admin; every self-registered account is "user" — there is no signup path to admin. */
+export type UserRole = "user" | "admin";
+
 /** Public-facing user profile — never includes the password hash. */
 export interface User {
   id: string;
@@ -6,6 +9,7 @@ export interface User {
   email: string;
   phone: string;
   createdAt: string;
+  role: UserRole;
 }
 
 /** What actually gets persisted. Only the repository layer ever sees `passwordHash`. */

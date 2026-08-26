@@ -24,7 +24,7 @@ export interface CustomerInfo {
 }
 
 export type PaymentStatus = "pending" | "paid" | "failed";
-export type OrderStatus = "processing" | "completed" | "cancelled";
+export type OrderStatus = "processing" | "shipped" | "delivered" | "cancelled";
 
 export interface Order {
   id: string;

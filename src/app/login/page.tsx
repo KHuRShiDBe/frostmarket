@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import LoginForm from "@/components/LoginForm";
+import DemoAdminHint from "@/components/DemoAdminHint";
 import { buildOpenGraph } from "@/lib/seo";
 
 const title = "로그인 | FrostMarket";
@@ -17,6 +18,7 @@ export default function LoginPage() {
     <main className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6">
       <div className="w-full max-w-md">
         <LoginForm />
+        <DemoAdminHint />
       </div>
     </main>
   );

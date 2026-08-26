@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { MAX_COMPARE, useCompare } from "@/context/CompareContext";
-import { getProduct, type Product } from "@/data/products";
+import type { Product } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { useLocale } from "@/context/LocaleContext";
 import CompareProductCard from "./CompareProductCard";
 import CompareSpecTable from "./CompareSpecTable";
@@ -22,7 +23,7 @@ export default function CompareView() {
   const { t } = useLocale();
 
   const selectedProducts = selectedIds
-    .map((id) => getProduct(id))
+    .map((id) => getProductService().getProduct(id))
     .filter((p): p is Product => Boolean(p));
 
   if (selectedProducts.length === 0) {

@@ -16,11 +16,13 @@ export interface AuthService {
   login(input: LoginInput, rememberMe: boolean): Promise<AuthResult>;
   logout(): void;
   updateProfile(userId: string, updates: ProfileUpdateInput): Promise<AuthResult>;
+  /** Every registered account, public-facing shape only (never a password hash) — for Admin → Customers. */
+  listUsers(): User[];
 }
 
 function toPublicUser(stored: StoredUser): User {
-  const { id, firstName, lastName, email, phone, createdAt } = stored;
-  return { id, firstName, lastName, email, phone, createdAt };
+  const { id, firstName, lastName, email, phone, createdAt, role } = stored;
+  return { id, firstName, lastName, email, phone, createdAt, role };
 }
 
 function generateUserId(): string {
@@ -59,6 +61,8 @@ export class DemoAuthService implements AuthService {
       email: input.email.trim(),
       phone: input.phone.trim(),
       createdAt: new Date().toISOString(),
+      // Self-registration always creates a "user" — there is no signup path to admin.
+      role: "user",
       passwordHash: await hashPassword(input.password),
     };
 
@@ -97,5 +101,9 @@ export class DemoAuthService implements AuthService {
       return { success: false, error: "unknown_error" };
     }
     return { success: true, user: toPublicUser(updated) };
+  }
+
+  listUsers(): User[] {
+    return this.users.getAll().map(toPublicUser);
   }
 }

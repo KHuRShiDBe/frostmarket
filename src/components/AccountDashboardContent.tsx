@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useLocale } from "@/context/LocaleContext";
 import { useFavorites } from "@/context/FavoritesContext";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
+import { useUserReviews } from "@/hooks/useReviews";
 import { getOrderRepository } from "@/services/orders";
 
 export default function AccountDashboardContent() {
@@ -12,6 +13,7 @@ export default function AccountDashboardContent() {
   const { t } = useLocale();
   const { count: favoritesCount } = useFavorites();
   const { recentIds } = useRecentlyViewed();
+  const { reviews } = useUserReviews(user?.id ?? null);
 
   if (!user) return null;
 
@@ -22,6 +24,11 @@ export default function AccountDashboardContent() {
       href: "/account/orders",
       label: t.account.nav.orders,
       value: t.account.dashboard.ordersCount(ordersCount),
+    },
+    {
+      href: "/account/reviews",
+      label: t.account.nav.reviews,
+      value: t.account.dashboard.reviewsCount(reviews.length),
     },
     {
       href: "/account/favorites",
@@ -46,7 +53,7 @@ export default function AccountDashboardContent() {
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
           <Link
             key={card.href}

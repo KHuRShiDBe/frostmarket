@@ -6,12 +6,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useLocale } from "@/context/LocaleContext";
 
-const NAV_ITEMS = ["overview", "orders", "favorites", "recentlyViewed", "profile"] as const;
+const NAV_ITEMS = ["overview", "orders", "reviews", "favorites", "recentlyViewed", "profile"] as const;
 type NavKey = (typeof NAV_ITEMS)[number];
 
 const NAV_HREFS: Record<NavKey, string> = {
   overview: "/account",
   orders: "/account/orders",
+  reviews: "/account/reviews",
   favorites: "/account/favorites",
   recentlyViewed: "/account/recently-viewed",
   profile: "/account/profile",
@@ -43,6 +44,8 @@ export default function AccountLayoutShell({ children }: { children: ReactNode }
         return t.account.nav.overview;
       case "orders":
         return t.account.nav.orders;
+      case "reviews":
+        return t.account.nav.reviews;
       case "favorites":
         return t.header.favoritesLink;
       case "recentlyViewed":

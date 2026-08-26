@@ -1,6 +1,14 @@
 /** Placeholder shown for any spec that has no confirmed source yet. */
 export const SPEC_PENDING = "확인 중";
 
+/**
+ * "active" is the only status shown to shoppers in the catalog. "draft" is
+ * an admin-only work-in-progress listing. "outOfStock" is set automatically
+ * when `stock` is depleted by a purchase (see ProductService.decrementStock)
+ * — an admin restocks by editing stock and/or status back to "active".
+ */
+export type ProductStatus = "active" | "draft" | "outOfStock";
+
 export interface Product {
   /** URL slug, unique per product */
   id: string;
@@ -112,6 +120,10 @@ export interface Product {
   upAppliance: string;
   /** Free-text notes; empty when there is nothing to add. */
   notes: string;
+  /** Units currently available. 0 blocks Add to Cart / Checkout. */
+  stock: number;
+  /** Catalog visibility + inventory state; see ProductStatus. */
+  status: ProductStatus;
 }
 
 /** Official Korean corporate name for a confirmed brand; falls back to SPEC_PENDING when brand isn't confirmed. */
@@ -238,6 +250,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "d312mbe31",
@@ -302,6 +316,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "d502mee33",
@@ -366,6 +382,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "g646gbb031",
@@ -444,6 +462,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "m876gbb231",
@@ -520,6 +540,8 @@ export const products: Product[] = [
     magicSpace: "더블 매직스페이스",
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "q343gic183s",
@@ -593,6 +615,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "s834mee111",
@@ -657,6 +681,8 @@ export const products: Product[] = [
     magicSpace: "지원",
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "s836mee022",
@@ -722,6 +748,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "t876mee011",
@@ -796,6 +824,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: "지원",
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "t876mee1h1",
@@ -872,6 +902,8 @@ export const products: Product[] = [
     magicSpace: "지원",
     upAppliance: "지원",
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rm70f63r2a",
@@ -936,6 +968,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rm70f90m1zd",
@@ -999,6 +1033,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rm70h91rma",
@@ -1071,6 +1107,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rm80f91h1w",
@@ -1144,6 +1182,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rm80h64s2a",
@@ -1216,6 +1256,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rm90f91d1w",
@@ -1287,6 +1329,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rm90h64p2w",
@@ -1358,6 +1402,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rs70f65q2y",
@@ -1421,6 +1467,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rs84db5002cw",
@@ -1483,6 +1531,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
   {
     id: "rs84db5661cw",
@@ -1553,6 +1603,8 @@ export const products: Product[] = [
     magicSpace: SPEC_PENDING,
     upAppliance: SPEC_PENDING,
     notes: "",
+    stock: 10,
+    status: "active",
   },
 ];
 

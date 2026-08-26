@@ -9,8 +9,10 @@ import { formatPriceKRW } from "@/lib/currency";
 import { getPaymentProvider } from "@/services/payment";
 import { getOrderRepository, type CustomerInfo, type DeliveryMethodId, type Order, type OrderItem } from "@/services/orders";
 import { getDeliveryCost } from "@/services/delivery";
-import { getProduct } from "@/data/products";
+import { getProductService } from "@/services/products";
 import { localizedBrandName } from "@/i18n";
+
+class InsufficientStockError extends Error {}
 
 function CardIcon() {
   return (
@@ -36,7 +38,7 @@ export default function PaymentStep({
   const { user } = useAuth();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const submittingRef = useRef(false);
 
   const deliveryCost = getDeliveryCost(deliveryMethod);
@@ -46,9 +48,19 @@ export default function PaymentStep({
     if (submittingRef.current) return;
     submittingRef.current = true;
     setIsProcessing(true);
-    setHasError(false);
+    setErrorMessage(null);
 
     try {
+      const productService = getProductService();
+
+      // Stock may have changed since the item was added to the cart (another
+      // order, or an admin edit) — re-check right before charging so nobody
+      // can buy more than is actually in stock.
+      const hasEnoughStock = items.every((line) => productService.hasSufficientStock(line.productId, line.quantity));
+      if (!hasEnoughStock) {
+        throw new InsufficientStockError();
+      }
+
       const repository = getOrderRepository();
       const orderNumber = repository.nextOrderNumber();
 
@@ -63,7 +75,7 @@ export default function PaymentStep({
       }
 
       const orderItems: OrderItem[] = items.map((line) => {
-        const product = getProduct(line.productId);
+        const product = productService.getProduct(line.productId);
         return {
           productId: line.productId,
           model: product?.model ?? line.productId,
@@ -92,10 +104,18 @@ export default function PaymentStep({
       };
 
       repository.save(order);
+      // Only decrement once payment + order creation both succeeded.
+      for (const line of items) {
+        productService.decrementStock(line.productId, line.quantity);
+      }
       clearCart();
       router.push(`/checkout/success?order=${encodeURIComponent(orderNumber)}`);
-    } catch {
-      setHasError(true);
+    } catch (error) {
+      setErrorMessage(
+        error instanceof InsufficientStockError
+          ? t.checkout.payment.insufficientStockError
+          : t.checkout.payment.errorTitle,
+      );
       setIsProcessing(false);
       submittingRef.current = false;
     }
@@ -120,7 +140,7 @@ export default function PaymentStep({
         </p>
       </div>
 
-      {hasError && <p className="text-sm text-rose-500">{t.checkout.payment.errorTitle}</p>}
+      {errorMessage && <p className="text-sm text-rose-500">{errorMessage}</p>}
 
       <div className="mt-2 flex items-center justify-between gap-3">
         <button

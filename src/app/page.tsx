@@ -1,12 +1,30 @@
 "use client";
 
+import Link from "next/link";
 import ProductCatalog from "@/components/ProductCatalog";
 import RecentlyViewedSection from "@/components/RecentlyViewedSection";
 import { products } from "@/data/products";
 import { useLocale } from "@/context/LocaleContext";
+import { useCatalogProducts } from "@/hooks/useCatalogProducts";
+
+function SparkleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
+      <path
+        d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+const INITIAL_ACTIVE_PRODUCTS = products.filter((product) => product.status === "active");
 
 export default function Home() {
   const { t } = useLocale();
+  const catalogProducts = useCatalogProducts(INITIAL_ACTIVE_PRODUCTS);
 
   return (
     <main className="flex-1">
@@ -34,6 +52,16 @@ export default function Home() {
             {t.hero.description}
           </p>
 
+          <div className="mt-6">
+            <Link
+              href="/finder"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-600 px-7 py-3.5 text-sm font-semibold text-white shadow-md shadow-sky-600/20 transition-colors hover:bg-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:text-base"
+            >
+              <SparkleIcon />
+              {t.finder.ctaButton}
+            </Link>
+          </div>
+
           <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-400">
             <span className="h-px w-8 bg-slate-300" aria-hidden />
             {t.hero.divider}
@@ -53,7 +81,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <ProductCatalog products={products} />
+          <ProductCatalog products={catalogProducts} />
         </div>
       </section>
 
