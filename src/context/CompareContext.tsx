@@ -4,12 +4,16 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 
-export const MAX_COMPARE = 3;
+export const MAX_COMPARE = 4;
+export const MIN_COMPARE = 2;
+
+const STORAGE_KEY = "frostmarket:compare";
 
 interface CompareContextValue {
   selectedIds: string[];
@@ -18,16 +22,41 @@ interface CompareContextValue {
   toggle: (id: string) => void;
   remove: (id: string) => void;
   clear: () => void;
-  isModalOpen: boolean;
-  openModal: () => void;
-  closeModal: () => void;
 }
 
 const CompareContext = createContext<CompareContextValue | null>(null);
 
 export function CompareProvider({ children }: { children: ReactNode }) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Load any previously saved comparison selection once, on the client only.
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Syncing from localStorage (client-only) on mount; SSR renders empty
+        // to avoid a hydration mismatch, so this can't be a lazy useState initializer.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (Array.isArray(parsed)) setSelectedIds(parsed.slice(0, MAX_COMPARE));
+      }
+    } catch {
+      // ignore malformed/inaccessible storage
+    }
+    setHydrated(true);
+  }, []);
+
+  // Persist after the initial load, so we never overwrite stored data with
+  // the empty initial state before hydration has run.
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedIds));
+    } catch {
+      // ignore write failures (e.g. storage disabled)
+    }
+  }, [selectedIds, hydrated]);
 
   const toggle = useCallback((id: string) => {
     setSelectedIds((prev) => {
@@ -43,11 +72,7 @@ export function CompareProvider({ children }: { children: ReactNode }) {
 
   const clear = useCallback(() => {
     setSelectedIds([]);
-    setIsModalOpen(false);
   }, []);
-
-  const openModal = useCallback(() => setIsModalOpen(true), []);
-  const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   const value = useMemo<CompareContextValue>(() => {
     const idsSet = new Set(selectedIds);
@@ -58,11 +83,8 @@ export function CompareProvider({ children }: { children: ReactNode }) {
       toggle,
       remove,
       clear,
-      isModalOpen,
-      openModal,
-      closeModal,
     };
-  }, [selectedIds, isModalOpen, toggle, remove, clear, openModal, closeModal]);
+  }, [selectedIds, toggle, remove, clear]);
 
   return (
     <CompareContext.Provider value={value}>{children}</CompareContext.Provider>

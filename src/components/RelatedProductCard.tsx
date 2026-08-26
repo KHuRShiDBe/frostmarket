@@ -1,21 +1,26 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { getBrandDisplayName, getProductFullName, SPEC_PENDING, type Product } from "@/data/products";
+import { SPEC_PENDING, type Product } from "@/data/products";
+import { localizedBrandName } from "@/i18n";
+import { useLocale } from "@/context/LocaleContext";
 
 export default function RelatedProductCard({ product }: { product: Product }) {
-  const brand = getBrandDisplayName(product.brand);
-  const brandPending = brand === SPEC_PENDING;
+  const { locale } = useLocale();
+  const brand = localizedBrandName(product.brand, locale);
+  const brandPending = product.brand === SPEC_PENDING;
 
   return (
     <Link
       href={`/products/${product.id}`}
-      aria-label={`${product.model} 제품 보기`}
+      aria-label={product.model}
       className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:border-sky-300 hover:shadow-md"
     >
       <div className="relative aspect-square w-full bg-white p-4">
         <Image
           src={product.mainImage}
-          alt={`${getProductFullName(product)} 제품 이미지`}
+          alt={product.model}
           fill
           className="object-contain transition-transform duration-300 group-hover:scale-105"
           sizes="(min-width: 640px) 25vw, 50vw"

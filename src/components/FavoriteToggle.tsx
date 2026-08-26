@@ -2,6 +2,7 @@
 
 import type { MouseEvent } from "react";
 import { useFavorites } from "@/context/FavoritesContext";
+import { useLocale } from "@/context/LocaleContext";
 
 function HeartIcon({ filled }: { filled: boolean }) {
   return (
@@ -31,6 +32,7 @@ export default function FavoriteToggle({
   variant?: "overlay" | "inline" | "pill";
 }) {
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { t } = useLocale();
   const active = isFavorite(productId);
 
   const handleClick = (e: MouseEvent) => {
@@ -39,13 +41,15 @@ export default function FavoriteToggle({
     toggleFavorite(productId);
   };
 
+  const ariaLabel = active ? t.favoriteToggle.removeAria(model) : t.favoriteToggle.addAria(model);
+
   if (variant === "pill") {
     return (
       <button
         type="button"
         onClick={handleClick}
         aria-pressed={active}
-        aria-label={active ? `${model} 관심 제품에서 제거` : `${model} 관심 제품에 추가`}
+        aria-label={ariaLabel}
         className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full border px-6 py-3.5 text-sm font-semibold shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:w-auto ${
           active
             ? "border-rose-200 bg-rose-50 text-rose-500 hover:bg-rose-100"
@@ -53,7 +57,7 @@ export default function FavoriteToggle({
         }`}
       >
         <HeartIcon filled={active} />
-        {active ? "관심 제품 해제" : "관심 제품 추가"}
+        {active ? t.favoriteToggle.removePill : t.favoriteToggle.addPill}
       </button>
     );
   }
@@ -68,7 +72,7 @@ export default function FavoriteToggle({
       type="button"
       onClick={handleClick}
       aria-pressed={active}
-      aria-label={active ? `${model} 관심 제품에서 제거` : `${model} 관심 제품에 추가`}
+      aria-label={ariaLabel}
       className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border shadow-sm backdrop-blur transition-colors ${positionClasses} ${
         active
           ? "border-rose-300 bg-rose-50 text-rose-500"

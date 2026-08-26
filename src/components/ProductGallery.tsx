@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useLocale } from "@/context/LocaleContext";
 
 function ChevronIcon({ direction }: { direction: "left" | "right" }) {
   return (
@@ -26,6 +27,7 @@ export default function ProductGallery({
   images: string[];
   mainImage: string;
 }) {
+  const { t } = useLocale();
   const [active, setActive] = useState(mainImage);
   const activeIndex = images.indexOf(active);
   const hasMultiple = images.length > 1;
@@ -40,7 +42,7 @@ export default function ProductGallery({
       <div className="relative flex h-72 w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:h-96 sm:p-6 lg:h-[460px]">
         <Image
           src={active}
-          alt={`${title} 제품 이미지`}
+          alt={t.productPage.productImageAlt(title)}
           fill
           className="object-contain p-2"
           sizes="(min-width: 1024px) 45vw, 100vw"
@@ -52,7 +54,7 @@ export default function ProductGallery({
             <button
               type="button"
               onClick={() => goTo(activeIndex - 1)}
-              aria-label="이전 이미지"
+              aria-label={t.productPage.prevImage}
               className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-500 shadow-sm backdrop-blur transition-colors hover:border-sky-300 hover:text-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
             >
               <ChevronIcon direction="left" />
@@ -60,7 +62,7 @@ export default function ProductGallery({
             <button
               type="button"
               onClick={() => goTo(activeIndex + 1)}
-              aria-label="다음 이미지"
+              aria-label={t.productPage.nextImage}
               className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-500 shadow-sm backdrop-blur transition-colors hover:border-sky-300 hover:text-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
             >
               <ChevronIcon direction="right" />
@@ -76,7 +78,7 @@ export default function ProductGallery({
               key={img}
               type="button"
               onClick={() => setActive(img)}
-              aria-label={`제품 이미지 ${i + 1}`}
+              aria-label={t.productPage.imageAtIndex(i + 1)}
               aria-pressed={active === img}
               className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 sm:h-16 sm:w-16 ${
                 active === img ? "border-sky-500" : "border-slate-200 hover:border-slate-300"
@@ -84,7 +86,7 @@ export default function ProductGallery({
             >
               <Image
                 src={img}
-                alt={`${title} 썸네일 이미지 ${i + 1}`}
+                alt={t.productPage.thumbnailAlt(title, i + 1)}
                 fill
                 className="object-contain p-1"
                 sizes="64px"

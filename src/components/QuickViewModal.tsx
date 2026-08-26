@@ -4,8 +4,12 @@ import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ContactTrigger from "./ContactTrigger";
+import AddToCartButton from "./AddToCartButton";
 import { useQuickView } from "@/context/QuickViewContext";
 import { getProductFullName, products, SPEC_PENDING } from "@/data/products";
+import { translateSpecValue } from "@/i18n";
+import { useLocale } from "@/context/LocaleContext";
+import { formatPriceKRW } from "@/lib/currency";
 
 function CloseIcon() {
   return (
@@ -22,6 +26,7 @@ function CloseIcon() {
 
 export default function QuickViewModal() {
   const { productId, closeQuickView } = useQuickView();
+  const { locale, t } = useLocale();
   const product = productId ? products.find((p) => p.id === productId) : null;
 
   useEffect(() => {
@@ -59,7 +64,7 @@ export default function QuickViewModal() {
         <div className="relative aspect-square w-full shrink-0 bg-white p-6 sm:p-10">
           <Image
             src={product.mainImage}
-            alt={`${getProductFullName(product)} 제품 이미지`}
+            alt={t.productPage.productImageAlt(getProductFullName(product))}
             fill
             className="object-contain p-2"
             sizes="(min-width: 640px) 50vw, 100vw"
@@ -70,14 +75,14 @@ export default function QuickViewModal() {
           <button
             type="button"
             onClick={closeQuickView}
-            aria-label="닫기"
+            aria-label={t.common.close}
             className="absolute right-4 top-4 rounded-full p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
           >
             <CloseIcon />
           </button>
 
           <span className="text-xs font-semibold uppercase tracking-wide text-sky-600">
-            냉장고
+            {t.quickView.categoryLabel}
           </span>
           <h2
             id="quickview-title"
@@ -87,34 +92,40 @@ export default function QuickViewModal() {
           </h2>
 
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-slate-400">브랜드</span>
+            <span className="text-slate-400">{t.quickView.brandLabel}</span>
             <span
               className={brandPending ? "italic text-slate-400" : "font-semibold text-slate-900"}
             >
-              {product.brand}
+              {brandPending ? translateSpecValue(product.brand, locale) : product.brand}
             </span>
           </div>
 
-          <p className="text-sm leading-relaxed text-slate-500">
-            {product.model}은 FrostMarket 제품 목록에 등록된 냉장고
-            모델입니다. 실제 촬영된 제품 이미지를 통해 디자인과 구성을
-            확인해 보세요.
+          <p className="font-heading text-xl font-bold text-slate-900">
+            {formatPriceKRW(product.price)}
           </p>
 
-          <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+          <p className="text-sm leading-relaxed text-slate-500">
+            {t.quickView.description(product.model)}
+          </p>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            <AddToCartButton
+              productId={product.id}
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 sm:flex-none"
+            />
             <Link
               href={`/products/${product.id}`}
               onClick={closeQuickView}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-sky-600"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-sky-300 hover:text-sky-600 sm:flex-none"
             >
-              자세히 보기
+              {t.quickView.viewDetails}
             </Link>
             <ContactTrigger
               productId={product.id}
               onClick={closeQuickView}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-sky-300 hover:text-sky-600"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-sky-300 hover:text-sky-600 sm:flex-none"
             >
-              구매 문의
+              {t.quickView.contact}
             </ContactTrigger>
           </div>
         </div>

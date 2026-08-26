@@ -3,13 +3,17 @@ import { Manrope } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CompareBar from "@/components/CompareBar";
-import CompareModal from "@/components/CompareModal";
 import BackToTop from "@/components/BackToTop";
 import QuickViewModal from "@/components/QuickViewModal";
+import CartDrawer from "@/components/CartDrawer";
+import CartToast from "@/components/CartToast";
 import { CompareProvider } from "@/context/CompareContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { QuickViewProvider } from "@/context/QuickViewContext";
 import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
+import { LocaleProvider } from "@/context/LocaleContext";
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { buildOpenGraph, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -33,21 +37,28 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={`${manrope.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-white font-body text-slate-900">
-        <FavoritesProvider>
-          <CompareProvider>
-            <QuickViewProvider>
-              <RecentlyViewedProvider>
-                <Header />
-                {children}
-                <Footer />
-                <CompareBar />
-                <CompareModal />
-                <BackToTop />
-                <QuickViewModal />
-              </RecentlyViewedProvider>
-            </QuickViewProvider>
-          </CompareProvider>
-        </FavoritesProvider>
+        <LocaleProvider>
+          <AuthProvider>
+            <FavoritesProvider>
+              <CompareProvider>
+                <QuickViewProvider>
+                  <RecentlyViewedProvider>
+                    <CartProvider>
+                      <Header />
+                      {children}
+                      <Footer />
+                      <CompareBar />
+                      <BackToTop />
+                      <QuickViewModal />
+                      <CartDrawer />
+                      <CartToast />
+                    </CartProvider>
+                  </RecentlyViewedProvider>
+                </QuickViewProvider>
+              </CompareProvider>
+            </FavoritesProvider>
+          </AuthProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

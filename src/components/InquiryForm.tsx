@@ -2,9 +2,9 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { getBrandDisplayName, getProduct, SPEC_PENDING } from "@/data/products";
-
-const INQUIRY_TYPES = ["구매 문의", "제품 문의", "배송 문의", "설치 문의", "기타 문의"] as const;
+import { getProduct, SPEC_PENDING } from "@/data/products";
+import { localizedBrandName } from "@/i18n";
+import { useLocale } from "@/context/LocaleContext";
 
 const fieldLabelClass = "text-sm font-medium text-slate-700";
 const fieldInputClass =
@@ -26,12 +26,11 @@ function CheckIcon() {
 }
 
 export default function InquiryForm() {
+  const { locale, t } = useLocale();
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [interest, setInterest] = useState("");
-  const [inquiryType, setInquiryType] = useState<(typeof INQUIRY_TYPES)[number]>(
-    INQUIRY_TYPES[0],
-  );
+  const [inquiryType, setInquiryType] = useState(0);
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -41,12 +40,13 @@ export default function InquiryForm() {
     const product = getProduct(modelId);
     if (!product) return;
 
-    const brand = getBrandDisplayName(product.brand);
+    const brand = localizedBrandName(product.brand, locale);
     // Reading window.location (client-only) on mount to prefill from a
     // product-detail link; can't be a lazy useState initializer since this
     // is a static page with no server-side query param to read.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setInterest(brand === SPEC_PENDING ? product.model : `${brand} ${product.model}`);
+    setInterest(product.brand === SPEC_PENDING ? product.model : `${brand} ${product.model}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e: FormEvent) => {
@@ -55,7 +55,7 @@ export default function InquiryForm() {
     setName("");
     setContact("");
     setInterest("");
-    setInquiryType(INQUIRY_TYPES[0]);
+    setInquiryType(0);
     setMessage("");
   };
 
@@ -66,25 +66,22 @@ export default function InquiryForm() {
           <CheckIcon />
         </span>
         <h2 className="font-heading text-lg font-bold text-slate-900 sm:text-xl">
-          온라인 문의 접수 기능은 준비 중입니다
+          {t.inquiry.submittedTitle}
         </h2>
-        <p className="max-w-sm text-sm leading-relaxed text-slate-500">
-          빠른 시일 내에 온라인 문의 접수 기능을 제공해 드릴 예정입니다. 입력해 주신
-          내용은 저장되거나 전송되지 않았습니다. 이용에 불편을 드려 죄송합니다.
-        </p>
+        <p className="max-w-sm text-sm leading-relaxed text-slate-500">{t.inquiry.submittedBody}</p>
         <div className="mt-2 flex flex-col gap-2 sm:flex-row">
           <button
             type="button"
             onClick={() => setSubmitted(false)}
             className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-sky-300 hover:text-sky-600"
           >
-            다시 작성하기
+            {t.inquiry.tryAgain}
           </button>
           <Link
             href="/#catalog"
             className="inline-flex items-center justify-center rounded-full bg-sky-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700"
           >
-            제품 목록 보기
+            {t.inquiry.viewCatalog}
           </Link>
         </div>
       </div>
@@ -98,7 +95,7 @@ export default function InquiryForm() {
     >
       <div className="flex flex-col gap-1.5">
         <label htmlFor="inquiry-name" className={fieldLabelClass}>
-          이름 <span className="text-rose-500">*</span>
+          {t.inquiry.nameLabel} <span className="text-rose-500">*</span>
         </label>
         <input
           id="inquiry-name"
@@ -106,14 +103,14 @@ export default function InquiryForm() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="이름을 입력해 주세요"
+          placeholder={t.inquiry.namePlaceholder}
           className={fieldInputClass}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="inquiry-contact" className={fieldLabelClass}>
-          연락처 <span className="text-rose-500">*</span>
+          {t.inquiry.contactLabel} <span className="text-rose-500">*</span>
         </label>
         <input
           id="inquiry-contact"
@@ -121,38 +118,38 @@ export default function InquiryForm() {
           required
           value={contact}
           onChange={(e) => setContact(e.target.value)}
-          placeholder="휴대폰 번호 또는 이메일"
+          placeholder={t.inquiry.contactPlaceholder}
           className={fieldInputClass}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="inquiry-interest" className={fieldLabelClass}>
-          관심 제품 / 모델명
+          {t.inquiry.interestLabel}
         </label>
         <input
           id="inquiry-interest"
           type="text"
           value={interest}
           onChange={(e) => setInterest(e.target.value)}
-          placeholder="예: LG전자 B502S53 (선택 사항)"
+          placeholder={t.inquiry.interestPlaceholder}
           className={fieldInputClass}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="inquiry-type" className={fieldLabelClass}>
-          문의 유형 <span className="text-rose-500">*</span>
+          {t.inquiry.typeLabel} <span className="text-rose-500">*</span>
         </label>
         <select
           id="inquiry-type"
           required
           value={inquiryType}
-          onChange={(e) => setInquiryType(e.target.value as (typeof INQUIRY_TYPES)[number])}
+          onChange={(e) => setInquiryType(Number(e.target.value))}
           className={`${fieldInputClass} appearance-none bg-[url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_0.75rem_center] bg-no-repeat pr-10`}
         >
-          {INQUIRY_TYPES.map((type) => (
-            <option key={type} value={type}>
+          {t.inquiry.types.map((type, i) => (
+            <option key={type} value={i}>
               {type}
             </option>
           ))}
@@ -161,7 +158,7 @@ export default function InquiryForm() {
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="inquiry-message" className={fieldLabelClass}>
-          문의 내용 <span className="text-rose-500">*</span>
+          {t.inquiry.messageLabel} <span className="text-rose-500">*</span>
         </label>
         <textarea
           id="inquiry-message"
@@ -169,7 +166,7 @@ export default function InquiryForm() {
           rows={6}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="문의하실 내용을 자세히 적어 주세요"
+          placeholder={t.inquiry.messagePlaceholder}
           className={`${fieldInputClass} resize-none`}
         />
       </div>
@@ -178,7 +175,7 @@ export default function InquiryForm() {
         type="submit"
         className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-sky-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:w-auto"
       >
-        문의 보내기
+        {t.inquiry.submit}
       </button>
     </form>
   );

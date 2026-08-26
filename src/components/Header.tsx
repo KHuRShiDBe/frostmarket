@@ -5,6 +5,12 @@ import Link from "next/link";
 import Logo from "./Logo";
 import ContactTrigger from "./ContactTrigger";
 import FavoritesNavLink from "./FavoritesNavLink";
+import CompareNavLink from "./CompareNavLink";
+import LanguageSwitcher from "./LanguageSwitcher";
+import CartButton from "./CartButton";
+import UserMenu from "./UserMenu";
+import { useLocale } from "@/context/LocaleContext";
+import { useAuth } from "@/context/AuthContext";
 
 function MenuIcon({ open }: { open: boolean }) {
   return (
@@ -25,6 +31,17 @@ const mobileLinkClass =
 export default function Header() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const { t } = useLocale();
+  const { user, logout, isLoading: authLoading } = useAuth();
+
+  const handleMobileLogout = () => {
+    close();
+    logout();
+    // A full navigation (not router.push) guarantees any mounted /account
+    // guard doesn't race this redirect and bounce the user to /login instead
+    // of home right after signing out.
+    window.location.href = "/";
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -40,7 +57,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-2.5 sm:py-3 sm:px-6">
         <Link
           href="/"
-          aria-label="FrostMarket — 홈으로"
+          aria-label={t.header.homeAria}
           className="rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         >
           <Logo />
@@ -48,27 +65,38 @@ export default function Header() {
 
         <nav className="hidden items-center gap-x-4 gap-y-1.5 text-sm text-slate-600 sm:flex sm:flex-wrap sm:gap-x-6">
           <Link href="/#catalog" className="transition-colors hover:text-sky-600">
-            제품 목록
+            {t.header.catalogLink}
           </Link>
           <FavoritesNavLink className="transition-colors hover:text-sky-600" />
+          <CompareNavLink className="transition-colors hover:text-sky-600" />
           <Link href="/about" className="transition-colors hover:text-sky-600">
-            FrostMarket 소개
+            {t.header.aboutLink}
           </Link>
           <ContactTrigger className="transition-colors hover:text-sky-600">
-            문의하기
+            {t.header.contactLink}
           </ContactTrigger>
         </nav>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 sm:hidden"
-        >
-          <MenuIcon open={open} />
-        </button>
+        <LanguageSwitcher className="hidden sm:inline-flex" />
+
+        <div className="hidden sm:block">
+          <UserMenu />
+        </div>
+
+        <div className="flex items-center gap-1">
+          <CartButton />
+
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? t.header.menuClose : t.header.menuOpen}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 sm:hidden"
+          >
+            <MenuIcon open={open} />
+          </button>
+        </div>
       </div>
 
       <div
@@ -80,15 +108,52 @@ export default function Header() {
         <nav className="min-h-0 overflow-hidden border-t border-slate-200 px-2 py-2">
           <div className="flex flex-col">
             <Link href="/#catalog" onClick={close} className={mobileLinkClass}>
-              제품 목록
+              {t.header.catalogLink}
             </Link>
             <Link href="/about" onClick={close} className={mobileLinkClass}>
-              FrostMarket 소개
+              {t.header.aboutLink}
             </Link>
             <FavoritesNavLink onClick={close} className={mobileLinkClass} />
+            <CompareNavLink onClick={close} className={mobileLinkClass} />
             <ContactTrigger onClick={close} className={mobileLinkClass}>
-              문의하기
+              {t.header.contactLink}
             </ContactTrigger>
+
+            {!authLoading && (
+              <div className="mt-2 flex flex-col border-t border-slate-100 pt-2">
+                {user ? (
+                  <>
+                    <Link href="/account" onClick={close} className={mobileLinkClass}>
+                      {t.account.nav.overview}
+                    </Link>
+                    <Link href="/account/orders" onClick={close} className={mobileLinkClass}>
+                      {t.account.nav.orders}
+                    </Link>
+                    <Link href="/account/profile" onClick={close} className={mobileLinkClass}>
+                      {t.account.nav.profile}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleMobileLogout}
+                      className={`${mobileLinkClass} text-rose-500`}
+                    >
+                      {t.auth.signOut}
+                    </button>
+                  </>
+                ) : (
+                  <Link href="/login" onClick={close} className={mobileLinkClass}>
+                    {t.auth.signIn}
+                  </Link>
+                )}
+              </div>
+            )}
+
+            <div className="mt-2 flex items-center justify-between gap-3 border-t border-slate-100 px-3 pt-3">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                {t.header.languageLabel}
+              </span>
+              <LanguageSwitcher />
+            </div>
           </div>
         </nav>
       </div>

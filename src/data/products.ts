@@ -6,6 +6,8 @@ export interface Product {
   id: string;
   /** Refrigerator model code */
   model: string;
+  /** Demo price in South Korean won (KRW), stored as a plain number. Format for display separately (see src/lib/currency.ts). */
+  price: number;
   /** Hero image shown on the catalog card and as the default detail-page image */
   mainImage: string;
   /** All available images for this model, public/-relative paths */
@@ -176,6 +178,7 @@ export const products: Product[] = [
   {
     id: "b502s53",
     model: "B502S53",
+    price: 1390000,
     mainImage: "/products/B502S53/Снимок экрана 2026-08-21 040851.png",
     images: [
       "/products/B502S53/Снимок экрана 2026-08-21 040851.png",
@@ -239,6 +242,7 @@ export const products: Product[] = [
   {
     id: "d312mbe31",
     model: "D312MBE31",
+    price: 990000,
     mainImage: "/products/D312MBE31/Снимок экрана 2026-08-21 041522.png",
     images: [
       "/products/D312MBE31/Снимок экрана 2026-08-21 041522.png",
@@ -302,6 +306,7 @@ export const products: Product[] = [
   {
     id: "d502mee33",
     model: "D502MEE33",
+    price: 1450000,
     mainImage: "/products/D502MEE33/Снимок экрана 2026-08-21 041718.png",
     images: [
       "/products/D502MEE33/Снимок экрана 2026-08-21 041718.png",
@@ -365,6 +370,7 @@ export const products: Product[] = [
   {
     id: "g646gbb031",
     model: "G646GBB031",
+    price: 2890000,
     mainImage: "/products/G646GBB031/Снимок экрана 2026-08-21 041917.png",
     images: [
       "/products/G646GBB031/Снимок экрана 2026-08-21 041917.png",
@@ -442,6 +448,7 @@ export const products: Product[] = [
   {
     id: "m876gbb231",
     model: "M876GBB231",
+    price: 4290000,
     mainImage: "/products/M876GBB231/Снимок экрана 2026-08-21 042215.png",
     images: [
       "/products/M876GBB231/Снимок экрана 2026-08-21 042215.png",
@@ -517,6 +524,7 @@ export const products: Product[] = [
   {
     id: "q343gic183s",
     model: "Q343GIC183S",
+    price: 1690000,
     mainImage: "/products/Q343GIC183S/Снимок экрана 2026-08-21 042705.png",
     images: [
       "/products/Q343GIC183S/Снимок экрана 2026-08-21 042705.png",
@@ -589,6 +597,7 @@ export const products: Product[] = [
   {
     id: "s834mee111",
     model: "S834MEE111",
+    price: 3990000,
     mainImage: "/products/S834MEE111/Снимок экрана 2026-08-21 042843.png",
     images: [
       "/products/S834MEE111/Снимок экрана 2026-08-21 042843.png",
@@ -652,6 +661,7 @@ export const products: Product[] = [
   {
     id: "s836mee022",
     model: "S836MEE022",
+    price: 3690000,
     mainImage: "/products/S836MEE022/Снимок экрана 2026-08-21 043116.png",
     images: [
       "/products/S836MEE022/Снимок экрана 2026-08-21 043116.png",
@@ -716,6 +726,7 @@ export const products: Product[] = [
   {
     id: "t876mee011",
     model: "T876MEE011",
+    price: 4190000,
     mainImage: "/products/T876MEE011/Снимок экрана 2026-08-21 043611.png",
     images: [
       "/products/T876MEE011/Снимок экрана 2026-08-21 043611.png",
@@ -789,6 +800,7 @@ export const products: Product[] = [
   {
     id: "t876mee1h1",
     model: "T876MEE1H1",
+    price: 4490000,
     mainImage: "/products/T876MEE1H1/Снимок экрана 2026-08-21 043314.png",
     images: [
       "/products/T876MEE1H1/Снимок экрана 2026-08-21 043314.png",
@@ -864,6 +876,7 @@ export const products: Product[] = [
   {
     id: "rm70f63r2a",
     model: "RM70F63R2A",
+    price: 2790000,
     mainImage: "/products/RM70F63R2A/Снимок экрана 2026-08-21 141238.png",
     images: [
       "/products/RM70F63R2A/Снимок экрана 2026-08-21 141238.png",
@@ -927,6 +940,7 @@ export const products: Product[] = [
   {
     id: "rm70f90m1zd",
     model: "RM70F90M1ZD",
+    price: 3590000,
     mainImage: "/products/RM70F90M1ZD/Снимок экрана 2026-08-21 141540.png",
     images: [
       "/products/RM70F90M1ZD/Снимок экрана 2026-08-21 141540.png",
@@ -989,6 +1003,7 @@ export const products: Product[] = [
   {
     id: "rm70h91rma",
     model: "RM70H91RMA",
+    price: 3990000,
     mainImage: "/products/RM70H91RMA/Снимок экрана 2026-08-21 141719.png",
     images: [
       "/products/RM70H91RMA/Снимок экрана 2026-08-21 141719.png",
@@ -1060,6 +1075,7 @@ export const products: Product[] = [
   {
     id: "rm80f91h1w",
     model: "RM80F91H1W",
+    price: 4590000,
     mainImage: "/products/RM80F91H1W/Снимок экрана 2026-08-21 144137.png",
     images: [
       "/products/RM80F91H1W/Снимок экрана 2026-08-21 144137.png",
@@ -1132,6 +1148,7 @@ export const products: Product[] = [
   {
     id: "rm80h64s2a",
     model: "RM80H64S2A",
+    price: 3290000,
     mainImage: "/products/RM80H64S2A/Снимок экрана 2026-08-21 143642.png",
     images: [
       "/products/RM80H64S2A/Снимок экрана 2026-08-21 143642.png",
@@ -1203,6 +1220,7 @@ export const products: Product[] = [
   {
     id: "rm90f91d1w",
     model: "RM90F91D1W",
+    price: 4990000,
     mainImage: "/products/RM90F91D1W/Снимок экрана 2026-08-21 144013.png",
     images: [
       "/products/RM90F91D1W/Снимок экрана 2026-08-21 144013.png",
@@ -1273,6 +1291,7 @@ export const products: Product[] = [
   {
     id: "rm90h64p2w",
     model: "RM90H64P2W",
+    price: 3890000,
     mainImage: "/products/RM90H64P2W/Снимок экрана 2026-08-21 142105.png",
     images: [
       "/products/RM90H64P2W/Снимок экрана 2026-08-21 142105.png",
@@ -1343,6 +1362,7 @@ export const products: Product[] = [
   {
     id: "rs70f65q2y",
     model: "RS70F65Q2Y",
+    price: 2190000,
     mainImage: "/products/RS70F65Q2Y/Снимок экрана 2026-08-21 141841.png",
     images: [
       "/products/RS70F65Q2Y/Снимок экрана 2026-08-21 141841.png",
@@ -1405,6 +1425,7 @@ export const products: Product[] = [
   {
     id: "rs84db5002cw",
     model: "RS84DB5002CW",
+    price: 2890000,
     mainImage: "/products/RS84DB5002CW/Снимок экрана 2026-08-21 141421.png",
     images: [
       "/products/RS84DB5002CW/Снимок экрана 2026-08-21 141421.png",
@@ -1466,6 +1487,7 @@ export const products: Product[] = [
   {
     id: "rs84db5661cw",
     model: "RS84DB5661CW",
+    price: 3290000,
     mainImage: "/products/RS84DB5661CW/Снимок экрана 2026-08-21 143847.png",
     images: [
       "/products/RS84DB5661CW/Снимок экрана 2026-08-21 143847.png",

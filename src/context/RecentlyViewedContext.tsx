@@ -12,11 +12,12 @@ import {
 } from "react";
 
 const STORAGE_KEY = "frostmarket:recentlyViewed";
-const MAX_ITEMS = 8;
+const MAX_ITEMS = 10;
 
 interface RecentlyViewedContextValue {
   recentIds: string[];
   recordView: (id: string) => void;
+  clearHistory: () => void;
 }
 
 const RecentlyViewedContext = createContext<RecentlyViewedContextValue | null>(null);
@@ -70,7 +71,15 @@ export function RecentlyViewedProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const value = useMemo(() => ({ recentIds, recordView }), [recentIds, recordView]);
+  const clearHistory = useCallback(() => {
+    hydratedRef.current = true;
+    setRecentIds([]);
+  }, []);
+
+  const value = useMemo(
+    () => ({ recentIds, recordView, clearHistory }),
+    [recentIds, recordView, clearHistory],
+  );
 
   return (
     <RecentlyViewedContext.Provider value={value}>{children}</RecentlyViewedContext.Provider>

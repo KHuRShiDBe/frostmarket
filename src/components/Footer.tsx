@@ -1,7 +1,10 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
 import Logo from "./Logo";
 import ContactTrigger from "./ContactTrigger";
+import { useLocale } from "@/context/LocaleContext";
 
 const linkClass = "text-sm text-slate-500 transition-colors hover:text-sky-600";
 
@@ -18,6 +21,7 @@ function FooterColumn({ title, children }: { title: string; children: ReactNode 
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { t } = useLocale();
 
   return (
     <footer className="border-t border-slate-200 bg-slate-50">
@@ -26,19 +30,17 @@ export default function Footer() {
           <div className="col-span-2 flex flex-col gap-3 sm:col-span-4 lg:col-span-1">
             <Link
               href="/"
-              aria-label="FrostMarket — 홈으로"
+              aria-label={t.header.homeAria}
               className="w-fit rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50"
             >
               <Logo />
             </Link>
-            <p className="max-w-xs text-sm leading-relaxed text-slate-500">
-              다양한 냉장고를 한눈에 비교하고 확인하세요.
-            </p>
+            <p className="max-w-xs text-sm leading-relaxed text-slate-500">{t.footer.tagline}</p>
           </div>
 
-          <FooterColumn title="제품">
+          <FooterColumn title={t.footer.productsColumn}>
             <Link href="/#catalog" className={linkClass}>
-              전체 제품
+              {t.footer.allProducts}
             </Link>
             <Link href="/?brand=LG#catalog" className={linkClass}>
               LG
@@ -47,28 +49,28 @@ export default function Footer() {
               Samsung
             </Link>
             <Link href="/favorites" className={linkClass}>
-              관심 제품
+              {t.footer.favorites}
             </Link>
           </FooterColumn>
 
-          <FooterColumn title="고객 지원">
-            <ContactTrigger className={`w-fit text-left ${linkClass}`}>구매 문의</ContactTrigger>
+          <FooterColumn title={t.footer.supportColumn}>
+            <ContactTrigger className={`w-fit text-left ${linkClass}`}>
+              {t.productPage.purchaseInquiry}
+            </ContactTrigger>
             <Link href="/faq" className={linkClass}>
-              자주 묻는 질문
+              {t.footer.faq}
             </Link>
           </FooterColumn>
 
-          <FooterColumn title="FrostMarket">
+          <FooterColumn title={t.footer.brandColumn}>
             <Link href="/about" className={linkClass}>
-              회사 소개
+              {t.footer.aboutUs}
             </Link>
           </FooterColumn>
         </div>
 
         <div className="mt-10 border-t border-slate-200 pt-6 sm:mt-12">
-          <p className="text-xs text-slate-400">
-            © {year} FrostMarket. All rights reserved.
-          </p>
+          <p className="text-xs text-slate-400">{t.footer.rights(year)}</p>
         </div>
       </div>
     </footer>
