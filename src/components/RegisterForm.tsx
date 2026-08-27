@@ -117,44 +117,59 @@ export default function RegisterForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.firstName} *</label>
+          <label htmlFor="register-firstName" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.firstName} *
+          </label>
           <input
+            id="register-firstName"
             type="text"
             value={form.firstName}
             onChange={update("firstName")}
             placeholder={t.auth.fields.firstNamePlaceholder}
+            aria-invalid={!!errors.firstName}
             className={inputClass("firstName")}
           />
           {errors.firstName && <p className="text-xs text-rose-500">{errors.firstName}</p>}
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.lastName} *</label>
+          <label htmlFor="register-lastName" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.lastName} *
+          </label>
           <input
+            id="register-lastName"
             type="text"
             value={form.lastName}
             onChange={update("lastName")}
             placeholder={t.auth.fields.lastNamePlaceholder}
+            aria-invalid={!!errors.lastName}
             className={inputClass("lastName")}
           />
           {errors.lastName && <p className="text-xs text-rose-500">{errors.lastName}</p>}
         </div>
 
         <div className="flex flex-col gap-1.5 sm:col-span-2">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.email} *</label>
+          <label htmlFor="register-email" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.email} *
+          </label>
           <input
+            id="register-email"
             type="email"
             value={form.email}
             onChange={update("email")}
             placeholder={t.auth.fields.emailPlaceholder}
+            aria-invalid={!!errors.email}
             className={inputClass("email")}
           />
           {errors.email && <p className="text-xs text-rose-500">{errors.email}</p>}
         </div>
 
         <div className="flex flex-col gap-1.5 sm:col-span-2">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.phoneOptional}</label>
+          <label htmlFor="register-phone" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.phoneOptional}
+          </label>
           <input
+            id="register-phone"
             type="tel"
             value={form.phone}
             onChange={update("phone")}
@@ -164,8 +179,11 @@ export default function RegisterForm() {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.password} *</label>
+          <label htmlFor="register-password" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.password} *
+          </label>
           <PasswordInput
+            id="register-password"
             value={form.password}
             onChange={update("password")}
             placeholder={t.auth.fields.passwordPlaceholder}
@@ -180,8 +198,11 @@ export default function RegisterForm() {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.confirmPassword} *</label>
+          <label htmlFor="register-confirmPassword" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.confirmPassword} *
+          </label>
           <PasswordInput
+            id="register-confirmPassword"
             value={form.confirmPassword}
             onChange={update("confirmPassword")}
             placeholder={t.auth.fields.confirmPasswordPlaceholder}
@@ -195,9 +216,12 @@ export default function RegisterForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex items-center justify-center rounded-full bg-sky-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-sky-400"
+        className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-sky-400"
       >
-        {t.auth.register.submit}
+        {isSubmitting && (
+          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+        )}
+        {isSubmitting ? t.auth.register.submitting : t.auth.register.submit}
       </button>
 
       <p className="text-center text-sm text-slate-500">

@@ -117,8 +117,11 @@ export default function ReviewFormModal({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.reviews.form.titleLabel}</label>
+            <label htmlFor="review-form-title-field" className="text-sm font-medium text-slate-700">
+              {t.reviews.form.titleLabel}
+            </label>
             <input
+              id="review-form-title-field"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -129,8 +132,11 @@ export default function ReviewFormModal({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.reviews.form.textLabel} *</label>
+            <label htmlFor="review-form-text-field" className="text-sm font-medium text-slate-700">
+              {t.reviews.form.textLabel} *
+            </label>
             <textarea
+              id="review-form-text-field"
               value={text}
               onChange={(e) => {
                 setText(e.target.value);

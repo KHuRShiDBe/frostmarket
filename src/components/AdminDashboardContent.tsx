@@ -114,7 +114,11 @@ export default function AdminDashboardContent() {
                   <tr
                     key={order.orderNumber}
                     onClick={() => router.push(`/admin/orders/${order.orderNumber}`)}
-                    className="cursor-pointer transition-colors hover:bg-slate-50"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") router.push(`/admin/orders/${order.orderNumber}`);
+                    }}
+                    tabIndex={0}
+                    className="cursor-pointer transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-500"
                   >
                     <td className="px-5 py-3.5 font-semibold text-slate-900 sm:px-6">
                       <Link href={`/admin/orders/${order.orderNumber}`} className="hover:underline">

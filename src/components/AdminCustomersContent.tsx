@@ -59,7 +59,11 @@ export default function AdminCustomersContent() {
                   <tr
                     key={user.id}
                     onClick={() => router.push(`/admin/customers/${user.id}`)}
-                    className="cursor-pointer transition-colors hover:bg-slate-50"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") router.push(`/admin/customers/${user.id}`);
+                    }}
+                    tabIndex={0}
+                    className="cursor-pointer transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-500"
                   >
                     <td className="px-5 py-3.5 font-semibold text-slate-900 sm:px-6">
                       <Link href={`/admin/customers/${user.id}`} className="hover:underline">

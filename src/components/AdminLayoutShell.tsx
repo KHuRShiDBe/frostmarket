@@ -55,6 +55,15 @@ export default function AdminLayoutShell({ children }: { children: ReactNode }) 
     setMobileNavOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileNavOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileNavOpen]);
+
   if (isLoading || !user) {
     return (
       <main className="flex flex-1 items-center justify-center px-4 py-24 text-center">

@@ -55,8 +55,11 @@ export default function LoginForm() {
       )}
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-slate-700">{t.auth.fields.email}</label>
+        <label htmlFor="login-email" className="text-sm font-medium text-slate-700">
+          {t.auth.fields.email}
+        </label>
         <input
+          id="login-email"
           type="email"
           value={email}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
@@ -67,12 +70,15 @@ export default function LoginForm() {
 
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.password}</label>
+          <label htmlFor="login-password" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.password}
+          </label>
           <Link href="/forgot-password" className="text-xs font-medium text-sky-600 hover:text-sky-700">
             {t.auth.login.forgotPasswordLink}
           </Link>
         </div>
         <PasswordInput
+          id="login-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder={t.auth.fields.passwordPlaceholder}
@@ -94,9 +100,12 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex items-center justify-center rounded-full bg-sky-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-sky-400"
+        className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-sky-400"
       >
-        {t.auth.login.submit}
+        {isSubmitting && (
+          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+        )}
+        {isSubmitting ? t.auth.login.submitting : t.auth.login.submit}
       </button>
 
       <p className="text-center text-sm text-slate-500">

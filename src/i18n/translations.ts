@@ -5,6 +5,7 @@ const ko = {
     backHome: "← 홈으로",
     close: "닫기",
     refrigeratorCategory: "냉장고",
+    backToTop: "맨 위로 이동",
   },
   header: {
     homeAria: "FrostMarket — 홈으로",
@@ -346,12 +347,14 @@ const ko = {
     register: {
       title: "회원가입",
       submit: "가입하기",
+      submitting: "가입 중...",
       haveAccount: "이미 계정이 있으신가요?",
       signInLink: "로그인",
     },
     login: {
       title: "로그인",
       submit: "로그인",
+      submitting: "로그인 중...",
       rememberMe: "로그인 상태 유지",
       forgotPasswordLink: "비밀번호를 잊으셨나요?",
       noAccount: "계정이 없으신가요?",
@@ -414,6 +417,7 @@ const ko = {
       title: "프로필",
       emailNote: "이메일은 변경할 수 없습니다",
       save: "변경 사항 저장",
+      saving: "저장 중...",
       saved: "변경 사항이 저장되었습니다",
     },
     recentlyViewedEmpty: "아직 최근에 본 제품이 없습니다",
@@ -939,8 +943,9 @@ const ko = {
   },
   notFound: {
     title: "페이지를 찾을 수 없습니다",
-    body: "요청하신 냉장고 제품을 찾을 수 없습니다.",
-    backLink: "← 제품 목록으로 돌아가기",
+    body: "요청하신 페이지를 찾을 수 없습니다. 주소가 잘못되었거나 페이지가 이동되었을 수 있습니다.",
+    homeLink: "홈으로 가기",
+    catalogLink: "카탈로그 보기",
   },
 };
 
@@ -951,6 +956,7 @@ const en: TranslationDict = {
     backHome: "← Home",
     close: "Close",
     refrigeratorCategory: "Refrigerator",
+    backToTop: "Back to top",
   },
   header: {
     homeAria: "FrostMarket — Home",
@@ -1292,12 +1298,14 @@ const en: TranslationDict = {
     register: {
       title: "Register",
       submit: "Create Account",
+      submitting: "Creating account...",
       haveAccount: "Already have an account?",
       signInLink: "Sign In",
     },
     login: {
       title: "Sign In",
       submit: "Sign In",
+      submitting: "Signing in...",
       rememberMe: "Remember Me",
       forgotPasswordLink: "Forgot password?",
       noAccount: "Don't have an account?",
@@ -1360,6 +1368,7 @@ const en: TranslationDict = {
       title: "Profile",
       emailNote: "Email cannot be changed",
       save: "Save Changes",
+      saving: "Saving...",
       saved: "Changes saved",
     },
     recentlyViewedEmpty: "You haven't viewed any refrigerators yet",
@@ -1885,8 +1894,9 @@ const en: TranslationDict = {
   },
   notFound: {
     title: "Page Not Found",
-    body: "We couldn't find the refrigerator product you requested.",
-    backLink: "← Back to Product List",
+    body: "We couldn't find the page you requested. The address may be wrong, or the page may have moved.",
+    homeLink: "Go to Home",
+    catalogLink: "Browse Catalog",
   },
 };
 
@@ -1895,6 +1905,7 @@ const ru: TranslationDict = {
     backHome: "← На главную",
     close: "Закрыть",
     refrigeratorCategory: "Холодильник",
+    backToTop: "Наверх",
   },
   header: {
     homeAria: "FrostMarket — на главную",
@@ -2236,12 +2247,14 @@ const ru: TranslationDict = {
     register: {
       title: "Регистрация",
       submit: "Зарегистрироваться",
+      submitting: "Регистрация...",
       haveAccount: "Уже есть аккаунт?",
       signInLink: "Войти",
     },
     login: {
       title: "Вход",
       submit: "Войти",
+      submitting: "Вход...",
       rememberMe: "Запомнить меня",
       forgotPasswordLink: "Забыли пароль?",
       noAccount: "Нет аккаунта?",
@@ -2305,6 +2318,7 @@ const ru: TranslationDict = {
       title: "Профиль",
       emailNote: "Email нельзя изменить",
       save: "Сохранить изменения",
+      saving: "Сохранение...",
       saved: "Изменения сохранены",
     },
     recentlyViewedEmpty: "Вы пока не просматривали холодильники",
@@ -2830,8 +2844,9 @@ const ru: TranslationDict = {
   },
   notFound: {
     title: "Страница не найдена",
-    body: "Запрошенный холодильник не найден.",
-    backLink: "← Вернуться к списку товаров",
+    body: "Запрошенная страница не найдена. Возможно, адрес указан неверно или страница была перемещена.",
+    homeLink: "На главную",
+    catalogLink: "Смотреть каталог",
   },
 };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/context/CartContext";
+import { useLocale } from "@/context/LocaleContext";
 
 function CheckIcon() {
   return (
@@ -18,6 +19,7 @@ function CheckIcon() {
 
 export default function CartToast() {
   const { notice, dismissNotice } = useCart();
+  const { t } = useLocale();
 
   return (
     <div
@@ -47,7 +49,7 @@ export default function CartToast() {
           <button
             type="button"
             onClick={dismissNotice}
-            aria-label="close"
+            aria-label={t.common.close}
             className="shrink-0 text-slate-400 transition-colors hover:text-white"
           >
             ×

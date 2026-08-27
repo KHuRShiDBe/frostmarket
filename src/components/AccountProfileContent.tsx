@@ -42,15 +42,26 @@ export default function AccountProfileContent() {
         )}
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.email}</label>
-          <input type="email" value={user.email} disabled className={`${fieldInputClass} cursor-not-allowed bg-slate-50 text-slate-400`} />
+          <label htmlFor="profile-email" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.email}
+          </label>
+          <input
+            id="profile-email"
+            type="email"
+            value={user.email}
+            disabled
+            className={`${fieldInputClass} cursor-not-allowed bg-slate-50 text-slate-400`}
+          />
           <p className="text-xs text-slate-400">{t.account.profile.emailNote}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.auth.fields.firstName}</label>
+            <label htmlFor="profile-firstName" className="text-sm font-medium text-slate-700">
+              {t.auth.fields.firstName}
+            </label>
             <input
+              id="profile-firstName"
               type="text"
               value={firstName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
@@ -58,8 +69,11 @@ export default function AccountProfileContent() {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.auth.fields.lastName}</label>
+            <label htmlFor="profile-lastName" className="text-sm font-medium text-slate-700">
+              {t.auth.fields.lastName}
+            </label>
             <input
+              id="profile-lastName"
               type="text"
               value={lastName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
@@ -69,8 +83,11 @@ export default function AccountProfileContent() {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-700">{t.auth.fields.phoneOptional}</label>
+          <label htmlFor="profile-phone" className="text-sm font-medium text-slate-700">
+            {t.auth.fields.phoneOptional}
+          </label>
           <input
+            id="profile-phone"
             type="tel"
             value={phone}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
@@ -82,9 +99,12 @@ export default function AccountProfileContent() {
         <button
           type="submit"
           disabled={isSaving}
-          className="inline-flex w-fit items-center justify-center rounded-full bg-sky-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-sky-400"
+          className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-sky-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-sky-400"
         >
-          {t.account.profile.save}
+          {isSaving && (
+            <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+          )}
+          {isSaving ? t.account.profile.saving : t.account.profile.save}
         </button>
       </form>
     </div>

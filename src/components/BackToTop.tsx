@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useCompare } from "@/context/CompareContext";
+import { useLocale } from "@/context/LocaleContext";
 
 function ArrowUpIcon() {
   return (
@@ -22,6 +23,7 @@ const SCROLL_THRESHOLD = 400;
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
   const { selectedIds } = useCompare();
+  const { t } = useLocale();
   const compareBarShowing = selectedIds.length > 0;
 
   useEffect(() => {
@@ -37,7 +39,7 @@ export default function BackToTop() {
     <button
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      aria-label="맨 위로 이동"
+      aria-label={t.common.backToTop}
       className={`fixed right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-md transition-all duration-300 hover:border-sky-300 hover:text-sky-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 sm:right-6 sm:h-12 sm:w-12 ${
         compareBarShowing ? "bottom-24 sm:bottom-28" : "bottom-6 sm:bottom-8"
       }`}

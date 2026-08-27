@@ -45,7 +45,7 @@ export default function CompareProductCard({
       <div className="relative h-40 w-full shrink-0 bg-white p-4 sm:h-48 sm:p-6">
         <Image
           src={product.mainImage}
-          alt={`${getProductFullName(product)} 제품 이미지`}
+          alt={t.productPage.productImageAlt(getProductFullName(product))}
           fill
           className="object-contain"
           sizes="(min-width: 1024px) 25vw, 50vw"

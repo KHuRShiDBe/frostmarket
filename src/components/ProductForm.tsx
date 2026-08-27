@@ -145,45 +145,60 @@ export default function ProductForm({
         <h2 className="font-heading text-base font-bold text-slate-900">{t.admin.productForm.sections.basicInfo}</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.brand} *</label>
+            <label htmlFor="product-brand" className="text-sm font-medium text-slate-700">
+              {t.admin.productForm.fields.brand} *
+            </label>
             <input
+              id="product-brand"
               type="text"
               value={form.brand}
               onChange={(e) => update("brand", e.target.value)}
+              aria-invalid={!!errors.brand}
               className={inputClass("brand")}
             />
             {errors.brand && <p className="text-xs text-rose-500">{errors.brand}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.model} *</label>
+            <label htmlFor="product-model" className="text-sm font-medium text-slate-700">
+              {t.admin.productForm.fields.model} *
+            </label>
             <input
+              id="product-model"
               type="text"
               value={form.model}
               onChange={(e) => update("model", e.target.value)}
               placeholder={t.admin.productForm.placeholders.model}
+              aria-invalid={!!errors.model}
               className={inputClass("model")}
             />
             {errors.model && <p className="text-xs text-rose-500">{errors.model}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.price} *</label>
+            <label htmlFor="product-price" className="text-sm font-medium text-slate-700">
+              {t.admin.productForm.fields.price} *
+            </label>
             <input
+              id="product-price"
               type="number"
               min={0}
               value={form.price}
               onChange={(e) => update("price", e.target.value)}
+              aria-invalid={!!errors.price}
               className={inputClass("price")}
             />
             {errors.price && <p className="text-xs text-rose-500">{errors.price}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.color}</label>
+            <label htmlFor="product-color" className="text-sm font-medium text-slate-700">
+              {t.admin.productForm.fields.color}
+            </label>
             <input
+              id="product-color"
               type="text"
               value={form.color}
               onChange={(e) => update("color", e.target.value)}
               placeholder={t.admin.productForm.placeholders.color}
-              className={inputClass("brand" as keyof FormErrors)}
+              className={`${fieldClass} border-slate-200`}
             />
           </div>
         </div>
@@ -193,19 +208,26 @@ export default function ProductForm({
         <h2 className="font-heading text-base font-bold text-slate-900">{t.admin.productForm.sections.specs}</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.totalCapacity} *</label>
+            <label htmlFor="product-capacity" className="text-sm font-medium text-slate-700">
+              {t.admin.productForm.fields.totalCapacity} *
+            </label>
             <input
+              id="product-capacity"
               type="number"
               min={0}
               value={form.totalCapacity}
               onChange={(e) => update("totalCapacity", e.target.value)}
+              aria-invalid={!!errors.totalCapacity}
               className={inputClass("totalCapacity")}
             />
             {errors.totalCapacity && <p className="text-xs text-rose-500">{errors.totalCapacity}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.doorType}</label>
+            <label htmlFor="product-doorType" className="text-sm font-medium text-slate-700">
+              {t.admin.productForm.fields.doorType}
+            </label>
             <select
+              id="product-doorType"
               value={form.doorType}
               onChange={(e) => update("doorType", e.target.value)}
               className={`${fieldClass} border-slate-200`}
@@ -219,15 +241,18 @@ export default function ProductForm({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.energyGrade}</label>
+            <label htmlFor="product-energyGrade" className="text-sm font-medium text-slate-700">
+              {t.admin.productForm.fields.energyGrade}
+            </label>
             <select
+              id="product-energyGrade"
               value={form.energyGrade}
               onChange={(e) => update("energyGrade", e.target.value as "1" | "2" | "3")}
               className={`${fieldClass} border-slate-200`}
             >
-              <option value="1">1{locale === "ko" ? "등급" : ""}</option>
-              <option value="2">2{locale === "ko" ? "등급" : ""}</option>
-              <option value="3">3{locale === "ko" ? "등급" : ""}</option>
+              <option value="1">{t.catalog.energyGradeOption(1)}</option>
+              <option value="2">{t.catalog.energyGradeOption(2)}</option>
+              <option value="3">{t.catalog.energyGradeOption(3)}</option>
             </select>
           </div>
         </div>
@@ -266,19 +291,26 @@ export default function ProductForm({
       <section className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <h2 className="font-heading text-base font-bold text-slate-900">{t.admin.productForm.sections.images}</h2>
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.mainImage} *</label>
+          <label htmlFor="product-mainImage" className="text-sm font-medium text-slate-700">
+            {t.admin.productForm.fields.mainImage} *
+          </label>
           <input
+            id="product-mainImage"
             type="text"
             value={form.mainImage}
             onChange={(e) => update("mainImage", e.target.value)}
             placeholder={t.admin.productForm.placeholders.mainImage}
+            aria-invalid={!!errors.mainImage}
             className={inputClass("mainImage")}
           />
           {errors.mainImage && <p className="text-xs text-rose-500">{errors.mainImage}</p>}
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.additionalImages}</label>
+          <label htmlFor="product-additionalImages" className="text-sm font-medium text-slate-700">
+            {t.admin.productForm.fields.additionalImages}
+          </label>
           <textarea
+            id="product-additionalImages"
             value={form.additionalImages}
             onChange={(e) => update("additionalImages", e.target.value)}
             placeholder={t.admin.productForm.placeholders.additionalImages}
@@ -292,21 +324,28 @@ export default function ProductForm({
         <h2 className="font-heading text-base font-bold text-slate-900">{t.admin.productForm.sections.inventory}</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.stock} *</label>
+            <label htmlFor="product-stock" className="text-sm font-medium text-slate-700">
+              {t.admin.productForm.fields.stock} *
+            </label>
             <input
+              id="product-stock"
               type="number"
               min={0}
               step={1}
               value={form.stock}
               onChange={(e) => update("stock", e.target.value)}
+              aria-invalid={!!errors.stock}
               className={inputClass("stock")}
             />
             {errors.stock && <p className="text-xs text-rose-500">{errors.stock}</p>}
           </div>
           {mode === "edit" && (
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-slate-700">{t.admin.productForm.fields.status}</label>
+              <label htmlFor="product-status" className="text-sm font-medium text-slate-700">
+                {t.admin.productForm.fields.status}
+              </label>
               <select
+                id="product-status"
                 value={form.status}
                 onChange={(e) => update("status", e.target.value as ProductStatus)}
                 className={`${fieldClass} border-slate-200`}

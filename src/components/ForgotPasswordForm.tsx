@@ -70,8 +70,11 @@ export default function ForgotPasswordForm() {
       </p>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-slate-700">{t.auth.fields.email}</label>
+        <label htmlFor="forgot-password-email" className="text-sm font-medium text-slate-700">
+          {t.auth.fields.email}
+        </label>
         <input
+          id="forgot-password-email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
